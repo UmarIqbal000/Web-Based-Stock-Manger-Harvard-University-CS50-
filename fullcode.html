@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Manager</title>
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #00d2ff, #3a7bd5); /* Aqua blue gradient */
+            color: #fff;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1, h2 {
+            margin-bottom: 20px;
+        }
+
+        /* Login/Registration Styles */
+        .login-container {
+            margin-top: 100px;
+        }
+        .login-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+        }
+        .login-form input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .login-form button {
+            width: 95%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 18px;
+            background: #007bb5; /* Dark aqua blue */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .login-form button:hover {
+            background: #005f8b; /* Darker aqua */
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+        }
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .menu button {
+            padding: 15px;
+            background: #00aaff; /* Bright aqua blue */
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .menu button:hover {
+            background: #007bb5; /* Dark aqua blue */
+        }
+        .content {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        .animated {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Logout Button Styles */
+        .logout-button {
+            padding: 12px 20px;
+            background: linear-gradient(145deg, #ff6a00, #ff8c00); /* Orange gradient */
+            border: none;
+            color: white;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+
+        .logout-button:hover {
+            background: linear-gradient(145deg, #ff8c00, #ff6a00);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        .logout-button:active {
+            background: #ff6a00;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            transform: translateY(2px); /* Slight press effect */
+        }
+
+        /* Buy/Sell Buttons Styles */
+        .buy-sell-btn {
+            padding: 10px 20px;
+            background: linear-gradient(145deg, #00ff00, #00cc00); /* Green gradient */
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            margin: 10px 0;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .buy-sell-btn:hover {
+            background: linear-gradient(145deg, #00cc00, #00ff00);
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        .buy-sell-btn:active {
+            background: #00cc00;
+            transform: translateY(2px); /* Slight press effect */
+        }
+
+        /* Input for Stock Symbol */
+        .stock-input {
+            width: 50%;
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            color: #333;
+        }
+
+        /* Transaction History Styles */
+        .transaction-history {
+            text-align: left;
+            padding: 10px;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* Heading Styles */
+        .main-heading {
+            font-size: 48px;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(90deg, #ff7e5f, #feb47b); /* Gradient background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.5);
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login/Register Page -->
+        <div class="login-container" id="loginContainer">
+            <div class="main-heading">
+                STOCK MANAGER - WEB APP
+            </div>
+            <div class="login-form">
+                <h2>Login</h2>
+                <input type="text" id="username" placeholder="Enter Username">
+                <input type="password" id="password" placeholder="Enter Password">
+                <button onclick="login()">Login</button>
+                <button onclick="register()">Register</button>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard" id="dashboard">
+            <h1>Welcome to Your Dashboard</h1>
+            <div class="menu">
+                <button onclick="showSection('stockPrices')">Stock Prices</button>
+                <button onclick="showSection('buySell')">Buy/Sell Stocks</button>
+                <button onclick="showSection('portfolio')">Portfolio</button>
+                <button onclick="showSection('transactionHistory')">Transaction History</button>
+            </div>
+            <div class="content" id="content">
+                <p>Select a menu option to get started.</p>
+            </div>
+            <!-- Logout Button -->
+            <button class="logout-button" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Stock Manager Web App. All rights reserved.</p>
+        <p>Designed by <a href="#">Umar Iqbal</a></p>
+    </footer>
+
+    <script>
+        // User Database (simulated for demo purposes)
+        const users = {};
+        const stockPrices = { 
+            'AAPL': 145,   // Apple
+            'MSFT': 300,   // Microsoft
+            'TSLA': 250,   // Tesla
+            'AMZN': 125,   // Amazon
+            'GOOGL': 134,  // Google
+            'META': 280,   // Meta (Facebook)
+            'NVDA': 420,   // Nvidia
+            'NFLX': 490    // Netflix
+        }; // Stock prices
+        let currentUser = null;
+        let userPortfolio = {}; // To track the portfolio of the user
+        let transactionHistory = {}; // To track transaction history for each user
+
+        // Function to handle registration
+        function register() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (!username || !password) {
+                alert("Please fill in all fields!");
+                return;
+            }
+
+            if (users[username]) {
+                alert("Username already exists! Please choose another.");
+            } else {
+                users[username] = password;
+                alert("User registered successfully!");
+            }
+        }
+
+        // Function to handle login
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if (users[username] && users[username] === password) {
+                currentUser = username;
+                userPortfolio[currentUser] = userPortfolio[currentUser] || {};
+                transactionHistory[currentUser] = transactionHistory[currentUser] || [];
+                document.getElementById("loginContainer").style.display = "none";
+                document.getElementById("dashboard").style.display = "block";
+            } else {
+                alert("Invalid username or password!");
+            }
+        }
+
+        // Function to show sections in the dashboard
+        function showSection(section) {
+            const content = document.getElementById("content");
+            content.classList.add("animated");
+
+            switch (section) {
+                case "stockPrices":
+                    let stockList = "<h2>Stock Prices</h2><ul>";
+                    for (let symbol in stockPrices) {
+                        stockList += `<li>${symbol}: $${stockPrices[symbol]}</li>`;
+                    }
+                    stockList += "</ul>";
+                    content.innerHTML = stockList;
+                    break;
+
+                case "buySell":
+                    content.innerHTML = `
+                        <h2>Buy/Sell Stocks</h2>
+                        <input type="text" class="stock-input" id="stockSymbol" placeholder="Enter Stock Symbol">
+                        <input type="number" class="stock-input" id="stockQuantity" placeholder="Enter Quantity">
+                        <button class="buy-sell-btn" onclick="buyStock()">Buy</button>
+                        <button class="buy-sell-btn" onclick="sellStock()">Sell</button>`;
+                    break;
+
+                case "portfolio":
+                    let portfolioContent = "<h2>Your Portfolio</h2><ul>";
+                    for (let symbol in userPortfolio[currentUser]) {
+                        portfolioContent += `<li>${symbol}: ${userPortfolio[currentUser][symbol]} shares</li>`;
+                    }
+                    portfolioContent += "</ul>";
+                    content.innerHTML = portfolioContent || "<p>No stocks in your portfolio yet.</p>";
+                    break;
+
+                case "transactionHistory":
+                    let transactions = "<h2>Transaction History</h2>";
+                    if (transactionHistory[currentUser].length > 0) {
+                        transactions += "<ul>";
+                        transactionHistory[currentUser].forEach(txn => {
+                            transactions += `<li>${txn.type} ${txn.quantity} shares of ${txn.symbol} at $${txn.price}</li>`;
+                        });
+                        transactions += "</ul>";
+                    } else {
+                        transactions += "<p>No transactions yet.</p>";
+                    }
+                    content.innerHTML = transactions;
+                    break;
+
+                default:
+                    content.innerHTML = "<p>Invalid section!</p>";
+                    break;
+            }
+        }
+
+        // Function to buy stock
+        function buyStock() {
+            const symbol = document.getElementById("stockSymbol").value.toUpperCase();
+            const quantity = parseInt(document.getElementById("stockQuantity").value);
+            if (!symbol || !quantity || isNaN(quantity) || quantity <= 0) {
+                alert("Please enter valid stock symbol and quantity.");
+                return;
+            }
+            if (stockPrices[symbol]) {
+                const price = stockPrices[symbol];
+                const totalCost = price * quantity;
+                alert(`Successfully bought ${quantity} shares of ${symbol} for $${totalCost}`);
+                userPortfolio[currentUser][symbol] = (userPortfolio[currentUser][symbol] || 0) + quantity;
+                transactionHistory[currentUser].push({
+                    type: "Buy",
+                    symbol: symbol,
+                    quantity: quantity,
+                    price: price
+                });
+            } else {
+                alert("Stock symbol not found.");
+            }
+        }
+
+        // Function to sell stock
+        function sellStock() {
+            const symbol = document.getElementById("stockSymbol").value.toUpperCase();
+            const quantity = parseInt(document.getElementById("stockQuantity").value);
+            if (!symbol || !quantity || isNaN(quantity) || quantity <= 0) {
+                alert("Please enter valid stock symbol and quantity.");
+                return;
+            }
+            if (userPortfolio[currentUser][symbol] >= quantity) {
+                const price = stockPrices[symbol];
+                const totalRevenue = price * quantity;
+                alert(`Successfully sold ${quantity} shares of ${symbol} for $${totalRevenue}`);
+                userPortfolio[currentUser][symbol] -= quantity;
+                transactionHistory[currentUser].push({
+                    type: "Sell",
+                    symbol: symbol,
+                    quantity: quantity,
+                    price: price
+                });
+            } else {
+                alert("You do not have enough shares of this stock.");
+            }
+        }
+
+        // Function to logout
+        function logout() {
+            currentUser = null;
+            document.getElementById("loginContainer").style.display = "block";
+            document.getElementById("dashboard").style.display = "none";
+        }
+    </script>
+</body>
+</html>
